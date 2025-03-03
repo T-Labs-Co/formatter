@@ -1,4 +1,5 @@
 <?php
+
 namespace TLabsCo\Formatter;
 
 use TLabsCo\Formatter\Helpers\StringHelper;
@@ -15,8 +16,6 @@ class FormatterRuleParser
 
     /**
      * Create a new formatter rule parser.
-     *
-     * @param  array  $data
      */
     public function __construct(array $data)
     {
@@ -98,7 +97,6 @@ class FormatterRuleParser
     /**
      * Parse an array based rule.
      *
-     * @param  array  $rules
      * @return array
      */
     protected static function parseArrayRule(array $rules)
@@ -140,9 +138,9 @@ class FormatterRuleParser
     {
         $rule = strtolower($rule);
 
-//        if (in_array($rule, ['regex', 'not_regex', 'notregex'], true)) {
-//            return [$parameter];
-//        }
+        //        if (in_array($rule, ['regex', 'not_regex', 'notregex'], true)) {
+        //            return [$parameter];
+        //        }
 
         return str_getcsv($parameter);
     }

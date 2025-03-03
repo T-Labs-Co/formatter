@@ -2,7 +2,6 @@
 
 namespace TLabsCo\Formatter;
 
-
 use TLabsCo\Formatter\Exceptions\FormatterException;
 use TLabsCo\Formatter\Helpers\ArrayHelper;
 use TLabsCo\Formatter\Helpers\StringHelper;
@@ -26,7 +25,6 @@ use TLabsCo\Formatter\Helpers\StringHelper;
  *      'title' => 'How to resolve missing [Composer Dependencies] on CentOS 8?',
  *      'publish_date' => '2024-05-02'
  *   ]
- *
  */
 class Formatter
 {
@@ -55,7 +53,6 @@ class Formatter
     protected $excludeAttributes = [];
 
     protected $implicitAttributes = [];
-
 
     /**
      * @var array
@@ -104,19 +101,17 @@ class Formatter
     }
 
     /**
-     * @param string $value
-     * @param string $rule
      * @return array
      */
     public static function singleFormat(string $value, string $rule)
     {
-        $field = "_" . StringHelper::random();
+        $field = '_'.StringHelper::random();
         $data = [
             $field => $value,
         ];
 
         $rules = [
-            $field => $rule
+            $field => $rule,
         ];
 
         $formatter = (new Formatter($data, $rules));
@@ -127,7 +122,6 @@ class Formatter
     /**
      * Parse the data array, converting dots and asterisks.
      *
-     * @param  array  $data
      * @return array
      */
     public function parseData(array $data)
@@ -180,12 +174,13 @@ class Formatter
                 }
             }
         }
+
         return $this;
     }
 
     /**
-     * @param string $attribute
-     * @param string $rule
+     * @param  string  $attribute
+     * @param  string  $rule
      */
     protected function formatAttribute($attribute, $rule)
     {
@@ -291,7 +286,6 @@ class Formatter
     /**
      * Set the formatter rules.
      *
-     * @param  array  $rules
      * @return $this
      */
     public function setRules(array $rules)
@@ -375,7 +369,6 @@ class Formatter
      * Remove the given attribute.
      *
      * @param  string  $attribute
-     *
      * @return void
      */
     protected function removeAttribute($attribute)
@@ -418,7 +411,6 @@ class Formatter
     /**
      * Set the data under formatter.
      *
-     * @param  array  $data
      * @return $this
      */
     public function setData(array $data)
@@ -452,7 +444,6 @@ class Formatter
     /**
      * Replace the placeholders in the given string.
      *
-     * @param  string  $value
      * @return string
      */
     protected function replacePlaceholderInString(string $value)
@@ -480,16 +471,16 @@ class Formatter
         if (ArrayHelper::has($this->formattedData, $attribute)) {
             return ArrayHelper::get($this->formattedData, $attribute);
         }
+
         return ArrayHelper::get($this->data, $attribute);
     }
 
     /**
-     * @param string $attribute
-     * @param mixed $value
+     * @param  string  $attribute
+     * @param  mixed  $value
      */
     protected function saveValue($attribute, $value)
     {
         ArrayHelper::set($this->formattedData, $attribute, $value);
     }
-
 }

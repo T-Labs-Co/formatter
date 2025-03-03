@@ -35,12 +35,12 @@ final class StringHelper
 
     public static function startsWith(array|string $haystack, array|string $needles): bool
     {
-        if (!is_iterable($needles)) {
+        if (! is_iterable($needles)) {
             $needles = [$needles];
         }
 
         foreach ($needles as $needle) {
-            if ((string)$needle !== '' && str_starts_with($haystack, $needle)) {
+            if ((string) $needle !== '' && str_starts_with($haystack, $needle)) {
                 return true;
             }
         }
@@ -54,7 +54,7 @@ final class StringHelper
             return $str;
         }
 
-        return rtrim(mb_strimwidth($str, 0, $limit, '', 'UTF-8')) . $end;
+        return rtrim(mb_strimwidth($str, 0, $limit, '', 'UTF-8')).$end;
     }
 
     public static function padBoth(string $value, int $length, string $pad = ' '): string
@@ -63,8 +63,8 @@ final class StringHelper
         $shortLeft = floor($short / 2);
         $shortRight = ceil($short / 2);
 
-        return mb_substr(str_repeat($pad, $shortLeft), 0, $shortLeft) .
-            $value .
+        return mb_substr(str_repeat($pad, $shortLeft), 0, $shortLeft).
+            $value.
             mb_substr(str_repeat($pad, $shortRight), 0, $shortRight);
     }
 
@@ -72,14 +72,13 @@ final class StringHelper
     {
         $short = max(0, $length - mb_strlen($value));
 
-        return mb_substr(str_repeat($pad, $short), 0, $short) . $value;
+        return mb_substr(str_repeat($pad, $short), 0, $short).$value;
     }
 
     public static function padRight(string $value, int $length, string $pad = ' '): string
     {
         $short = max(0, $length - mb_strlen($value));
 
-        return $value . mb_substr(str_repeat($pad, $short), 0, $short);
+        return $value.mb_substr(str_repeat($pad, $short), 0, $short);
     }
-
 }

@@ -2,18 +2,18 @@
 
 namespace TLabsCo\Formatter;
 
-use TLabsCo\Formatter\Helpers\StringHelper;
-use TLabsCo\Formatter\Exceptions\FormatterException;
 use DateTimeInterface;
+use TLabsCo\Formatter\Exceptions\FormatterException;
+use TLabsCo\Formatter\Helpers\StringHelper;
 
 trait FormatAttributes
 {
     /**
      * if strict is true then return true/false other else return 1/0
      *
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return bool|int
      */
     protected function formatBoolean($attribute, $value, $parameters = [])
@@ -29,8 +29,8 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
+     * @param  string  $attribute
+     * @param  string  $value
      * @return bool|int
      */
     protected function formatInteger($attribute, $value)
@@ -39,8 +39,8 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
+     * @param  string  $attribute
+     * @param  string  $value
      * @return float
      */
     protected function formatFloat($attribute, $value)
@@ -49,27 +49,27 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return float
      */
     protected function formatPricing($attribute, $value, $parameters)
     {
-//        if (!$this->checkValidParameterCount(1, $parameters, 'pricing')) {
-//            return false;
-//        }
+        //        if (!$this->checkValidParameterCount(1, $parameters, 'pricing')) {
+        //            return false;
+        //        }
 
         if (is_float($value) || is_int($value)) {
             $value = number_format($value, $parameters[0] ?? 2);
         }
 
-        return str_replace(",", "", $value);
+        return str_replace(',', '', $value);
     }
 
     /**
-     * @param string $attribute
-     * @param string|array $value
+     * @param  string  $attribute
+     * @param  string|array  $value
      * @return array
      */
     protected function formatArray($attribute, $value)
@@ -78,47 +78,49 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return string
      */
     protected function formatSubstring($attribute, $value, $parameters)
     {
-        //$this->requireParameterCount(2, $parameters, 'substring');
-        if (!$this->checkValidParameterCount(2, $parameters, 'substring')) {
+        // $this->requireParameterCount(2, $parameters, 'substring');
+        if (! $this->checkValidParameterCount(2, $parameters, 'substring')) {
             return false;
         }
 
         if (is_int($parameters[0])) {
             $from = (int) $parameters[0];
             $length = (int) $parameters[1];
+
             return mb_substr($value, $from, $length);
         } else {
             $from_s = $parameters[0];
             $to_s = $parameters[1];
             $start = 0;
             $end = strlen($value);
-            if (!empty($from_s)) {
+            if (! empty($from_s)) {
                 $start = strpos($value, $from_s);
             }
             if ($start == -1) {
                 $start = 0;
             }
-            if (!empty($from_s)) {
+            if (! empty($from_s)) {
                 $end = strpos($value, $to_s);
             }
             if ($end == -1) {
                 $end = strlen($value);
             }
+
             return mb_substr($value, $start + strlen($from_s), $end - $start);
         }
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return string
      */
     protected function formatTrimCustom($attribute, $value, $parameters)
@@ -127,9 +129,9 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return string
      */
     protected function formatTrim($attribute, $value, $parameters)
@@ -137,10 +139,10 @@ trait FormatAttributes
         $charlist = " \t\n\r\0\x0B";
 
         if ($parameters && is_array($parameters) && count($parameters) > 0) {
-            $charlist = implode("", $parameters);
+            $charlist = implode('', $parameters);
         }
 
-        if (!$value) {
+        if (! $value) {
             return $value;
         }
 
@@ -149,9 +151,9 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return string
      */
     protected function formatTrimStart($attribute, $value, $parameters)
@@ -159,10 +161,10 @@ trait FormatAttributes
         $charlist = " \t\n\r\0\x0B";
 
         if ($parameters && is_array($parameters) && count($parameters) > 0) {
-            $charlist = implode("", $parameters);
+            $charlist = implode('', $parameters);
         }
 
-        if (!$value) {
+        if (! $value) {
             return $value;
         }
 
@@ -170,9 +172,9 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return string
      */
     protected function formatTrimEnd($attribute, $value, $parameters)
@@ -180,10 +182,10 @@ trait FormatAttributes
         $charlist = " \t\n\r\0\x0B";
 
         if ($parameters && is_array($parameters) && count($parameters) > 0) {
-            $charlist = implode("", $parameters);
+            $charlist = implode('', $parameters);
         }
 
-        if (!$value) {
+        if (! $value) {
             return $value;
         }
 
@@ -191,9 +193,9 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return string
      */
     protected function formatTrimSingleQuote($attribute, $value, $parameters)
@@ -201,10 +203,10 @@ trait FormatAttributes
         $charlist = ", \t\n\r\0\x0B";
 
         if ($parameters && is_array($parameters) && count($parameters) > 0) {
-            $charlist = implode("", $parameters);
+            $charlist = implode('', $parameters);
         }
 
-        if (!$value) {
+        if (! $value) {
             return $value;
         }
 
@@ -214,15 +216,15 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return string
      */
     protected function formatReplace($attribute, $value, $parameters)
     {
-        //$this->requireParameterCount(2, $parameters, 'replace');
-        if (!$this->checkValidParameterCount(2, $parameters, 'replace')) {
+        // $this->requireParameterCount(2, $parameters, 'replace');
+        if (! $this->checkValidParameterCount(2, $parameters, 'replace')) {
             return false;
         }
 
@@ -233,15 +235,15 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return string
      */
     protected function formatReplaceFirst($attribute, $value, $parameters)
     {
-        //$this->requireParameterCount(2, $parameters, 'replace_first');
-        if (!$this->checkValidParameterCount(2, $parameters, 'replace_first')) {
+        // $this->requireParameterCount(2, $parameters, 'replace_first');
+        if (! $this->checkValidParameterCount(2, $parameters, 'replace_first')) {
             return false;
         }
 
@@ -257,15 +259,15 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return string
      */
     protected function formatReplaceLast($attribute, $value, $parameters)
     {
-        //$this->requireParameterCount(2, $parameters, 'replace_last');
-        if (!$this->checkValidParameterCount(2, $parameters, 'replace_last')) {
+        // $this->requireParameterCount(2, $parameters, 'replace_last');
+        if (! $this->checkValidParameterCount(2, $parameters, 'replace_last')) {
             return false;
         }
 
@@ -281,8 +283,8 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
+     * @param  string  $attribute
+     * @param  string  $value
      * @return string
      */
     protected function formatStudly($attribute, $value)
@@ -291,8 +293,8 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
+     * @param  string  $attribute
+     * @param  string  $value
      * @return string
      */
     protected function formatTitle($attribute, $value)
@@ -301,8 +303,8 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
+     * @param  string  $attribute
+     * @param  string  $value
      * @return string
      */
     protected function formatUpper($attribute, $value)
@@ -311,8 +313,8 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
+     * @param  string  $attribute
+     * @param  string  $value
      * @return string
      */
     protected function formatLower($attribute, $value)
@@ -321,8 +323,8 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
+     * @param  string  $attribute
+     * @param  string  $value
      * @return string
      */
     protected function formatMd5($attribute, $value)
@@ -331,14 +333,14 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return bool|null|string
      */
     protected function formatUrlParam($attribute, $value, $parameters)
     {
-        if (!$this->checkValidParameterCount(1, $parameters, 'url_param')) {
+        if (! $this->checkValidParameterCount(1, $parameters, 'url_param')) {
             return false;
         }
 
@@ -359,15 +361,15 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return string
      */
     protected function formatLimit($attribute, $value, $parameters)
     {
-        //$this->requireParameterCount(1, $parameters, 'limit');
-        if (!$this->checkValidParameterCount(1, $parameters, 'limit')) {
+        // $this->requireParameterCount(1, $parameters, 'limit');
+        if (! $this->checkValidParameterCount(1, $parameters, 'limit')) {
             return false;
         }
 
@@ -378,15 +380,15 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return string
      */
     protected function formatPad($attribute, $value, $parameters)
     {
-        //$this->requireParameterCount(1, $parameters, 'pad');
-        if (!$this->checkValidParameterCount(1, $parameters, 'pad')) {
+        // $this->requireParameterCount(1, $parameters, 'pad');
+        if (! $this->checkValidParameterCount(1, $parameters, 'pad')) {
             return false;
         }
 
@@ -397,15 +399,15 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return string
      */
     protected function formatPadLeft($attribute, $value, $parameters)
     {
-        //$this->requireParameterCount(1, $parameters, 'pad_left');
-        if (!$this->checkValidParameterCount(1, $parameters, 'pad_left')) {
+        // $this->requireParameterCount(1, $parameters, 'pad_left');
+        if (! $this->checkValidParameterCount(1, $parameters, 'pad_left')) {
             return false;
         }
 
@@ -416,15 +418,15 @@ trait FormatAttributes
     }
 
     /**
-     * @param string $attribute
-     * @param string $value
-     * @param array $parameters
+     * @param  string  $attribute
+     * @param  string  $value
+     * @param  array  $parameters
      * @return string
      */
     protected function formatPadRight($attribute, $value, $parameters)
     {
-        //$this->requireParameterCount(1, $parameters, 'pad_right');
-        if (!$this->checkValidParameterCount(1, $parameters, 'pad_right')) {
+        // $this->requireParameterCount(1, $parameters, 'pad_right');
+        if (! $this->checkValidParameterCount(1, $parameters, 'pad_right')) {
             return false;
         }
 
@@ -453,11 +455,11 @@ trait FormatAttributes
 
         $date = date_parse($value);
 
-        if (!checkdate($date['month'], $date['day'], $date['year'])) {
+        if (! checkdate($date['month'], $date['day'], $date['year'])) {
             return false;
         }
 
-        return $date['year'] . '-' . $date['month'] . '-' . $date['day'];
+        return $date['year'].'-'.$date['month'].'-'.$date['day'];
     }
 
     /**
@@ -472,6 +474,7 @@ trait FormatAttributes
         if (! is_string($value) && ! is_numeric($value)) {
             return false;
         }
+
         return strtotime($value);
     }
 
@@ -485,8 +488,8 @@ trait FormatAttributes
      */
     protected function formatDateFormat($attribute, $value, $parameters)
     {
-        //$this->requireParameterCount(1, $parameters, 'date_format');
-        if (!$this->checkValidParameterCount(1, $parameters, 'date_format')) {
+        // $this->requireParameterCount(1, $parameters, 'date_format');
+        if (! $this->checkValidParameterCount(1, $parameters, 'date_format')) {
             return false;
         }
 
@@ -523,13 +526,13 @@ trait FormatAttributes
      * @param  array  $parameters
      * @param  string  $rule
      * @return bool
-     *
      */
     protected function checkValidParameterCount($count, $parameters, $rule)
     {
         if (count($parameters) < $count) {
             return false;
         }
+
         return true;
     }
 }
