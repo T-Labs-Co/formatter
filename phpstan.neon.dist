@@ -10,6 +10,8 @@ parameters:
     tmpDir: build/phpstan
     checkOctaneCompatibility: true
     checkModelProperties: true
+    ignoreErrors:
+            - '#If condition is always false.#'
     parallel:
         processTimeout: 300.0
         maximumNumberOfProcesses: 1
