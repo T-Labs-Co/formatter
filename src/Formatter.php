@@ -251,12 +251,11 @@ class Formatter
      *
      * @param  string  $attribute
      * @param  string|array  $rules
-     * @return array|null
      */
-    protected function getRule($attribute, $rules)
+    protected function getRule($attribute, $rules): ?array
     {
         if (! array_key_exists($attribute, $this->rules)) {
-            return;
+            return null;
         }
 
         $rules = (array) $rules;
@@ -354,11 +353,13 @@ class Formatter
      */
     protected function shouldBeExcluded($attribute)
     {
-        foreach ($this->excludeAttributes as $excludeAttribute) {
-            if ($attribute === $excludeAttribute ||
-                StringHelper::startsWith($attribute, $excludeAttribute.'.')) {
+        if (! empty($this->excludeAttributes)) {
+            foreach ($this->excludeAttributes as $excludeAttribute) {
+                if ($attribute === $excludeAttribute ||
+                    StringHelper::startsWith($attribute, $excludeAttribute.'.')) {
 
-                return true;
+                    return true;
+                }
             }
         }
 

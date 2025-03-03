@@ -13,4 +13,6 @@ parameters:
     parallel:
         processTimeout: 300.0
         maximumNumberOfProcesses: 1
-
+    treatPhpDocTypesAsCertain: false
+    tips:
+        treatPhpDocTypesAsCertain: false

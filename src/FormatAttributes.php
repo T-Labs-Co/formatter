@@ -20,7 +20,7 @@ trait FormatAttributes
     {
         $strict = true;
 
-        if ($parameters && is_array($parameters) && count($parameters) > 0) {
+        if ($parameters && is_array($parameters)) {
             $trueValues = [true, 'yes', 'ok', 1, '1', 'on', 'enabled'];
             $strict = in_array($parameters[0], $trueValues, true);
         }
@@ -50,9 +50,9 @@ trait FormatAttributes
 
     /**
      * @param  string  $attribute
-     * @param  string  $value
+     * @param  mixed  $value
      * @param  array  $parameters
-     * @return float
+     * @return float|string
      */
     protected function formatPricing($attribute, $value, $parameters)
     {
@@ -81,7 +81,7 @@ trait FormatAttributes
      * @param  string  $attribute
      * @param  string  $value
      * @param  array  $parameters
-     * @return string
+     * @return string|bool
      */
     protected function formatSubstring($attribute, $value, $parameters)
     {
@@ -103,13 +103,13 @@ trait FormatAttributes
             if (! empty($from_s)) {
                 $start = strpos($value, $from_s);
             }
-            if ($start == -1) {
+            if (! $start) {
                 $start = 0;
             }
             if (! empty($from_s)) {
                 $end = strpos($value, $to_s);
             }
-            if ($end == -1) {
+            if (! $end) {
                 $end = strlen($value);
             }
 
@@ -134,11 +134,11 @@ trait FormatAttributes
      * @param  array  $parameters
      * @return string
      */
-    protected function formatTrim($attribute, $value, $parameters)
+    protected function formatTrim($attribute, $value, $parameters = [])
     {
         $charlist = " \t\n\r\0\x0B";
 
-        if ($parameters && is_array($parameters) && count($parameters) > 0) {
+        if ($parameters && is_array($parameters)) {
             $charlist = implode('', $parameters);
         }
 
@@ -160,7 +160,7 @@ trait FormatAttributes
     {
         $charlist = " \t\n\r\0\x0B";
 
-        if ($parameters && is_array($parameters) && count($parameters) > 0) {
+        if ($parameters && is_array($parameters)) {
             $charlist = implode('', $parameters);
         }
 
@@ -177,11 +177,11 @@ trait FormatAttributes
      * @param  array  $parameters
      * @return string
      */
-    protected function formatTrimEnd($attribute, $value, $parameters)
+    protected function formatTrimEnd($attribute, $value, $parameters = [])
     {
         $charlist = " \t\n\r\0\x0B";
 
-        if ($parameters && is_array($parameters) && count($parameters) > 0) {
+        if ($parameters && is_array($parameters)) {
             $charlist = implode('', $parameters);
         }
 
@@ -198,11 +198,11 @@ trait FormatAttributes
      * @param  array  $parameters
      * @return string
      */
-    protected function formatTrimSingleQuote($attribute, $value, $parameters)
+    protected function formatTrimSingleQuote($attribute, $value, $parameters = [])
     {
         $charlist = ", \t\n\r\0\x0B";
 
-        if ($parameters && is_array($parameters) && count($parameters) > 0) {
+        if ($parameters && is_array($parameters)) {
             $charlist = implode('', $parameters);
         }
 
@@ -219,7 +219,7 @@ trait FormatAttributes
      * @param  string  $attribute
      * @param  string  $value
      * @param  array  $parameters
-     * @return string
+     * @return string|bool
      */
     protected function formatReplace($attribute, $value, $parameters)
     {
@@ -238,7 +238,7 @@ trait FormatAttributes
      * @param  string  $attribute
      * @param  string  $value
      * @param  array  $parameters
-     * @return string
+     * @return string|bool
      */
     protected function formatReplaceFirst($attribute, $value, $parameters)
     {
@@ -251,7 +251,7 @@ trait FormatAttributes
         $replace = $parameters[1];
         $subject = $value;
 
-        if ($position = strpos($subject, $search) !== false) {
+        if ($position = strpos($subject, $search)) {
             return substr_replace($subject, $replace, $position, strlen($search));
         }
 
@@ -262,7 +262,7 @@ trait FormatAttributes
      * @param  string  $attribute
      * @param  string  $value
      * @param  array  $parameters
-     * @return string
+     * @return string|bool
      */
     protected function formatReplaceLast($attribute, $value, $parameters)
     {
@@ -275,7 +275,7 @@ trait FormatAttributes
         $replace = $parameters[1];
         $subject = $value;
 
-        if ($position = strrpos($subject, $search) !== false) {
+        if ($position = strpos($subject, $search)) {
             return substr_replace($subject, $replace, $position, strlen($search));
         }
 
@@ -364,7 +364,7 @@ trait FormatAttributes
      * @param  string  $attribute
      * @param  string  $value
      * @param  array  $parameters
-     * @return string
+     * @return string|bool
      */
     protected function formatLimit($attribute, $value, $parameters)
     {
@@ -383,7 +383,7 @@ trait FormatAttributes
      * @param  string  $attribute
      * @param  string  $value
      * @param  array  $parameters
-     * @return string
+     * @return string|bool
      */
     protected function formatPad($attribute, $value, $parameters)
     {
@@ -402,7 +402,7 @@ trait FormatAttributes
      * @param  string  $attribute
      * @param  string  $value
      * @param  array  $parameters
-     * @return string
+     * @return string|bool
      */
     protected function formatPadLeft($attribute, $value, $parameters)
     {
@@ -421,7 +421,7 @@ trait FormatAttributes
      * @param  string  $attribute
      * @param  string  $value
      * @param  array  $parameters
-     * @return string
+     * @return string|bool
      */
     protected function formatPadRight($attribute, $value, $parameters)
     {
@@ -441,7 +441,7 @@ trait FormatAttributes
      *
      * @param  string  $attribute
      * @param  mixed  $value
-     * @return bool
+     * @return string|bool
      */
     protected function formatDate($attribute, $value)
     {
@@ -467,7 +467,7 @@ trait FormatAttributes
      *
      * @param  string  $attribute
      * @param  mixed  $value
-     * @return bool
+     * @return string|bool|int
      */
     protected function formatTimestamp($attribute, $value)
     {
@@ -484,7 +484,7 @@ trait FormatAttributes
      * @param  string  $attribute
      * @param  mixed  $value
      * @param  array  $parameters
-     * @return bool
+     * @return string|bool
      */
     protected function formatDateFormat($attribute, $value, $parameters)
     {

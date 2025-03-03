@@ -60,8 +60,8 @@ final class StringHelper
     public static function padBoth(string $value, int $length, string $pad = ' '): string
     {
         $short = max(0, $length - mb_strlen($value));
-        $shortLeft = floor($short / 2);
-        $shortRight = ceil($short / 2);
+        $shortLeft = (int) floor($short / 2);
+        $shortRight = (int) ceil($short / 2);
 
         return mb_substr(str_repeat($pad, $shortLeft), 0, $shortLeft).
             $value.
