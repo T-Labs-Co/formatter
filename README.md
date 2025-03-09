@@ -60,6 +60,51 @@ $formatted = [
 */
 ```
 
+Use custom format rule
+
+```php
+
+use TLabsCo\Formatter\Rules\FormatterRule;
+
+class Max100FormatRule extends FormatterRule
+{
+    public function format($attribute, $value)
+    {
+        if (strlen($value) > 100) {
+            return substr($value, 0, 100);
+        }
+
+        return $value;
+    }
+}
+// Using with custom rule
+use TLabsCo\Formatter\Formatter;
+
+$formatterRules = [
+    'title' => 'trim|replace:Local Composer Dependencies,[Local Composer Dependencies]|replace:[Local Composer Dependencies],[Composer Dependencies]|limit:150',
+    'publish_date' => 'date_format:Y-m-d',
+    'short_description' => ['trim', new Max100FormatRule()],
+];
+
+$data = [
+    'title' => '  How to resolve missing Local Composer Dependencies on CentOS 8?  ',
+    'publish_date' => '2024/05/02 13:00',
+    'short_description' => 'Very long description Very long description Very long description Very long description Very long description Very long description Very long description Very long description Very long description Very long description Very long description Very long description Very long description Very long description '
+];
+
+$formatted = Formatter::make($data, $formatterRules)->format()->formatted();
+
+/*
+Output:
+$formatted = [
+    'title' => 'How to resolve missing [Composer Dependencies] on CentOS 8?',
+    'publish_date' => '2024-05-02',
+    'short_description' => 'Very long description Very long description Very long description Very long description Very long de'
+];
+*/
+
+```
+
 ## Testing
 
 ```bash
