@@ -33,5 +33,5 @@ abstract class FormatterRule implements FormatterRuleContract
         $this->formatter = $formatter;
     }
 
-    public abstract function format($attribute, $value);
+    abstract public function format($attribute, $value);
 }
