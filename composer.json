@@ -2,8 +2,11 @@
     "name": "t-labs-co/formatter",
     "description": "The Laravel Formatter package",
     "keywords": [
-        "T.Labs & Co.",
+        "T.Labs and Co.",
+        "T.Labs Co.",
         "laravel",
+        "string formatter",
+        "string helper",
         "formatter"
     ],
     "homepage": "https://github.com/T-Labs-Co/formatter",
