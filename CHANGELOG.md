@@ -16,4 +16,4 @@ Contact [T.Labs & Co.](https://github.com/ty-huynh)
 
 - Initial release of the `formatter` package.
 - Format string with helper
-- Format applied chain idea from Laravel validation rule styles
+- Format applied with chain method, idea from Laravel validation rule styles

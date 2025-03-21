@@ -24,7 +24,7 @@ We're PHP and Laravel whizzes, and we'd love to work with you! We can:
 
 This package supports the following versions of PHP:
 
-- PHP: `^8.1`
+- PHP: `^8.2`
 
 ## Installation
 
