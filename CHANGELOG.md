@@ -14,6 +14,13 @@ Contact [T.Labs & Co.](https://github.com/ty-huynh)
 
 ## [Released]
 
+
+## [1.0.2] - 2025-03-22
+
+### Update
+
+- composer version
+
 ## [1.0.1] - 2025-03-22
 
 ### Update
