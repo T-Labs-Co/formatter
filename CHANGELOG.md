@@ -4,6 +4,10 @@ All notable changes to `formatter` will be documented in this file.
 
 Contact [T.Labs & Co.](https://github.com/ty-huynh)
 
+## v1.0.2 - 2025-03-22
+
+**Full Changelog**: https://github.com/T-Labs-Co/formatter/compare/v1.0.1...v1.0.2
+
 ## v1.0.1 - 2025-03-22
 
 **Full Changelog**: https://github.com/T-Labs-Co/formatter/compare/v1.0.0...v1.0.1
@@ -13,7 +17,6 @@ Contact [T.Labs & Co.](https://github.com/ty-huynh)
 **Full Changelog**: https://github.com/T-Labs-Co/formatter/commits/v1.0.0
 
 ## [Released]
-
 
 ## [1.0.2] - 2025-03-22
 
