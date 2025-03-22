@@ -10,10 +10,18 @@ Contact [T.Labs & Co.](https://github.com/ty-huynh)
 
 ## [Released]
 
+## [1.0.1] - 2025-03-22
+
+### Update
+- Readme and changelog
+
 ## [1.0.0] - 2025-03-21
 
 ### Added
 
 - Initial release of the `formatter` package.
-- Format string with helper
-- Format applied with chain method, idea from Laravel validation rule styles
+- Simple and intuitive syntax for defining formatting rules.
+- Support for multiple built-in formatting rules (e.g., trim, replace, limit, date_format).
+- Ability to create custom formatting rules.
+- Integration with Laravel models and validation.
+- Comprehensive unit tests for ensuring reliability.

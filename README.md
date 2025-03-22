@@ -1,9 +1,9 @@
 # The PHP Formatter package
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/ty-huynh/formatter.svg?style=flat-square)](https://packagist.org/packages/ty-huynh/formatter)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/ty-huynh/formatter/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/ty-huynh/formatter/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/ty-huynh/formatter/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/ty-huynh/formatter/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/ty-huynh/formatter.svg?style=flat-square)](https://packagist.org/packages/ty-huynh/formatter)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/t-labs-co/formatter.svg?style=flat-square)](https://packagist.org/packages/t-labs-co/formatter)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/t-labs-co/formatter/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/t-labs-co/formatter/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/t-labs-co/formatter/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/t-labs-co/formatter/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/t-labs-co/formatter.svg?style=flat-square)](https://packagist.org/packages/t-labs-co/formatter)
 
 This package helps you format your PHP strings. You can use it for one string or many, and it's as simple as using Laravel validation.
 
@@ -19,6 +19,14 @@ We're PHP and Laravel whizzes, and we'd love to work with you! We can:
 - Review code and Quality Assurance.
 - Offer team and project leadership.
 - Delivery Manager
+
+## Features
+
+- Simple and intuitive syntax for defining formatting rules.
+- Support for multiple built-in formatting rules (e.g., trim, replace, limit, date_format).
+- Ability to create custom formatting rules.
+- Integration with Laravel models and validation.
+- Comprehensive unit tests for ensuring reliability.
 
 ## PHP and Laravel Version Support
 
