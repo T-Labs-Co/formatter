@@ -1,26 +1,8 @@
 <?php
 
-/*
- * This file is a part of package t-co-labs/formatter
- *
- * (c) T.Labs & Co.
- * Contact for Work: T. <hongty.huynh@gmail.com>
- *
- * We're PHP and Laravel whizzes, and we'd love to work with you! We can:
- *  - Design the perfect fit solution for your app.
- *  - Make your code cleaner and faster.
- *  - Refactoring and Optimize performance.
- *  - Ensure Laravel best practices are followed.
- *  - Provide expert Laravel support.
- *  - Review code and Quality Assurance.
- *  - Offer team and project leadership.
- *  - Delivery Manager
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+declare(strict_types=1);
 
-namespace TLabsCo\Formatter\Helpers;
+namespace TLabsCo\Formatter\Support;
 
 final class StringHelper
 {
@@ -46,21 +28,21 @@ final class StringHelper
     {
         $words = explode(' ', str_replace(['-', '_'], ' ', $value));
 
-        $studlyWords = array_map(function ($word) {
+        $studlyWords = array_map(function (string $word): string {
             return ucfirst($word);
         }, $words);
 
         return implode($studlyWords);
     }
 
-    public static function startsWith(array|string $haystack, array|string $needles): bool
+    public static function startsWith(string $haystack, array|string $needles): bool
     {
-        if (! is_iterable($needles)) {
+        if (! is_array($needles)) {
             $needles = [$needles];
         }
 
         foreach ($needles as $needle) {
-            if ((string) $needle !== '' && str_starts_with($haystack, $needle)) {
+            if ((string) $needle !== '' && str_starts_with($haystack, (string) $needle)) {
                 return true;
             }
         }
@@ -74,7 +56,7 @@ final class StringHelper
             return $str;
         }
 
-        return rtrim(mb_strimwidth($str, 0, $limit, '', 'UTF-8')).$end;
+        return rtrim(mb_strimwidth($str, 0, $limit, '', 'UTF-8')) . $end;
     }
 
     public static function padBoth(string $value, int $length, string $pad = ' '): string
@@ -83,8 +65,8 @@ final class StringHelper
         $shortLeft = (int) floor($short / 2);
         $shortRight = (int) ceil($short / 2);
 
-        return mb_substr(str_repeat($pad, $shortLeft), 0, $shortLeft).
-            $value.
+        return mb_substr(str_repeat($pad, $shortLeft), 0, $shortLeft) .
+            $value .
             mb_substr(str_repeat($pad, $shortRight), 0, $shortRight);
     }
 
@@ -92,13 +74,13 @@ final class StringHelper
     {
         $short = max(0, $length - mb_strlen($value));
 
-        return mb_substr(str_repeat($pad, $short), 0, $short).$value;
+        return mb_substr(str_repeat($pad, $short), 0, $short) . $value;
     }
 
     public static function padRight(string $value, int $length, string $pad = ' '): string
     {
         $short = max(0, $length - mb_strlen($value));
 
-        return $value.mb_substr(str_repeat($pad, $short), 0, $short);
+        return $value . mb_substr(str_repeat($pad, $short), 0, $short);
     }
 }

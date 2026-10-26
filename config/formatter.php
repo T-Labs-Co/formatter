@@ -1,6 +1,7 @@
 <?php
 
-// config for TLabsCo/Formatter
-return [
+declare(strict_types=1);
 
+return [
+    // Formatter configuration
 ];

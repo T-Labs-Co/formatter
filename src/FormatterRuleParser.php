@@ -1,41 +1,26 @@
 <?php
 
-/*
- * This file is a part of package t-co-labs/formatter
- *
- * (c) T.Labs & Co.
- * Contact for Work: T. <hongty.huynh@gmail.com>
- *
- * We're PHP and Laravel whizzes, and we'd love to work with you! We can:
- *  - Design the perfect fit solution for your app.
- *  - Make your code cleaner and faster.
- *  - Refactoring and Optimize performance.
- *  - Ensure Laravel best practices are followed.
- *  - Provide expert Laravel support.
- *  - Review code and Quality Assurance.
- *  - Offer team and project leadership.
- *  - Delivery Manager
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+declare(strict_types=1);
 
 namespace TLabsCo\Formatter;
 
-use TLabsCo\Formatter\Helpers\StringHelper;
+use TLabsCo\Formatter\Support\StringHelper;
 
 /**
  * Class FormatterRuleParser
  */
 class FormatterRuleParser
 {
-    public $data;
+    /** @var array<string, mixed> */
+    public array $data;
 
-    // TODO: support implicit attributes
-    public $implicitAttributes;
+    /** @var string[] */
+    public array $implicitAttributes;
 
     /**
      * Create a new formatter rule parser.
+     *
+     * @param  array<string, mixed>  $data
      */
     public function __construct(array $data)
     {
@@ -45,10 +30,9 @@ class FormatterRuleParser
     /**
      * Parse the human-friendly rules into a full rules array for the validator.
      *
-     * @param  array  $rules
-     * @return \stdClass
+     * @return object{rules: array<string, array<int, string>>, implicitAttributes: array<int, string>}
      */
-    public function explode($rules)
+    public function explode(array $rules): object
     {
         $this->implicitAttributes = [];
 
@@ -63,10 +47,10 @@ class FormatterRuleParser
     /**
      * Explode the rules into an array of explicit rules.
      *
-     * @param  array  $rules
-     * @return array
+     * @param  array<string, mixed>  $rules
+     * @return array<string, array<int, string>>
      */
-    protected function explodeRules($rules)
+    protected function explodeRules(array $rules): array
     {
         foreach ($rules as $key => $rule) {
             // TODO: support wild card rules string
@@ -79,10 +63,9 @@ class FormatterRuleParser
     /**
      * Explode the explicit rule into an array if necessary.
      *
-     * @param  mixed  $rule
-     * @return array
+     * @return array<int, string>
      */
-    protected function explodeExplicitRule($rule)
+    protected function explodeExplicitRule(mixed $rule): array
     {
         if (is_string($rule)) {
             return explode('|', $rule);
@@ -98,10 +81,10 @@ class FormatterRuleParser
     /**
      * Extract the rule name and parameters from a rule.
      *
-     * @param  array|string  $rules
-     * @return array
+     * @param  array<int, mixed>|string  $rules
+     * @return array{0: string, 1: array<int, string>}
      */
-    public static function parse($rules)
+    public static function parse(array|string $rules): array
     {
         if (is_array($rules)) {
             $rules = static::parseArrayRule($rules);
@@ -117,20 +100,20 @@ class FormatterRuleParser
     /**
      * Parse an array based rule.
      *
-     * @return array
+     * @param  array<int, mixed>  $rules
+     * @return array{0: string, 1: array<int, mixed>}
      */
-    protected static function parseArrayRule(array $rules)
+    protected static function parseArrayRule(array $rules): array
     {
-        return [StringHelper::studly(trim($rules[0] ?? null)), array_slice($rules, 1)];
+        return [StringHelper::studly(trim((string) ($rules[0] ?? ''))), array_slice($rules, 1)];
     }
 
     /**
      * Parse a string based rule.
      *
-     * @param  string  $rules
-     * @return array
+     * @return array{0: string, 1: array<int, string>}
      */
-    protected static function parseStringRule($rules)
+    protected static function parseStringRule(string $rules): array
     {
         $parameters = [];
 
@@ -150,28 +133,20 @@ class FormatterRuleParser
     /**
      * Parse a parameter list.
      *
-     * @param  string  $rule
-     * @param  string  $parameter
-     * @return array
+     * @return array<int, string>
      */
-    protected static function parseParameters($rule, $parameter)
+    protected static function parseParameters(string $rule, string $parameter): array
     {
-        $rule = strtolower($rule);
+        $params = str_getcsv($parameter);
 
-        //        if (in_array($rule, ['regex', 'not_regex', 'notregex'], true)) {
-        //            return [$parameter];
-        //        }
-
-        return str_getcsv($parameter);
+        /** @var array<int, string> $params */
+        return $params;
     }
 
     /**
      * Normalizes a rule so that we can accept short types.
-     *
-     * @param  string  $rule
-     * @return string
      */
-    protected static function normalizeRule($rule)
+    protected static function normalizeRule(string $rule): string
     {
         switch ($rule) {
             case 'Int':

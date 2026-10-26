@@ -24,9 +24,3 @@ _ide_helper_models.php
 /.fleet
 /.vscode
 
-# Misc
-phpunit.xml
-phpstan.neon
-testbench.yaml
-/docs
-/coverage
