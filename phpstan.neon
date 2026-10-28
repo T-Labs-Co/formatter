@@ -1,0 +1,12 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - config
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        - '#Method .* has parameter \$parameters with no value type specified in iterable type array#'
+        - '#Method .* has parameter \$rules with no value type specified in iterable type array#'
+        - '#Method .* has parameter \$arr with no value type specified in iterable type array#'
+        - '#Method .* has parameter \$needles with no value type specified in iterable type array#'
+        - '#Method .* return type has no value type specified in iterable type array#'

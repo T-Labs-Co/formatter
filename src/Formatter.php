@@ -1,30 +1,12 @@
 <?php
 
-/*
- * This file is a part of package t-co-labs/formatter
- *
- * (c) T.Labs & Co.
- * Contact for Work: T. <hongty.huynh@gmail.com>
- *
- * We're PHP and Laravel whizzes, and we'd love to work with you! We can:
- *  - Design the perfect fit solution for your app.
- *  - Make your code cleaner and faster.
- *  - Refactoring and Optimize performance.
- *  - Ensure Laravel best practices are followed.
- *  - Provide expert Laravel support.
- *  - Review code and Quality Assurance.
- *  - Offer team and project leadership.
- *  - Delivery Manager
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+declare(strict_types=1);
 
 namespace TLabsCo\Formatter;
 
 use TLabsCo\Formatter\Exceptions\FormatterException;
-use TLabsCo\Formatter\Helpers\ArrayHelper;
-use TLabsCo\Formatter\Helpers\StringHelper;
+use TLabsCo\Formatter\Support\ArrayHelper;
+use TLabsCo\Formatter\Support\StringHelper;
 
 /**
  * Class Formatter
@@ -53,31 +35,34 @@ class Formatter
     /**
      * The rules to be applied to the data.
      *
-     * @var array
+     * @var array<string, array<int, string>>
      */
-    protected $rules;
+    protected array $rules = [];
 
     /**
      * The data under formatter.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $data = [];
+    protected array $data = [];
 
-    protected $formattedData = [];
+    /** @var array<string, mixed> */
+    protected array $formattedData = [];
 
-    protected $dotPlaceholder;
+    protected string $dotPlaceholder;
 
-    protected $currentRule;
+    protected ?string $currentRule = null;
 
-    protected $excludeAttributes = [];
+    /** @var string[] */
+    protected array $excludeAttributes = [];
 
-    protected $implicitAttributes = [];
+    /** @var string[] */
+    protected array $implicitAttributes = [];
 
     /**
-     * @var array
+     * @var string[]
      */
-    protected $implicitRules = [
+    protected array $implicitRules = [
         'Boolean',
         'Integer',
         'Float',
@@ -102,10 +87,16 @@ class Formatter
         'Pricing',
     ];
 
-    protected $excludeRules = [];
+    /** @var string[] */
+    protected array $excludeRules = [];
 
-    protected $initialRules = [];
+    /** @var array<string, mixed> */
+    protected array $initialRules = [];
 
+    /**
+     * @param  array<string, mixed>  $data
+     * @param  array<string, mixed>  $rules
+     */
     public function __construct(array $data, array $rules)
     {
         $this->dotPlaceholder = StringHelper::random(3);
@@ -115,17 +106,21 @@ class Formatter
         $this->setRules($rules);
     }
 
-    public static function make($data, $rules)
+    /**
+     * @param  array<string, mixed>  $data
+     * @param  array<string, mixed>  $rules
+     */
+    public static function make(array $data, array $rules): self
     {
-        return new Formatter($data, $rules);
+        return new self($data, $rules);
     }
 
     /**
-     * @return array
+     * Format a single value with a single rule.
      */
-    public static function singleFormat(string $value, string $rule)
+    public static function singleFormat(mixed $value, string $rule): mixed
     {
-        $field = '_'.StringHelper::random();
+        $field = '_' . StringHelper::random();
         $data = [
             $field => $value,
         ];
@@ -134,7 +129,7 @@ class Formatter
             $field => $rule,
         ];
 
-        $formatter = (new Formatter($data, $rules));
+        $formatter = new self($data, $rules);
 
         return $formatter->format()->getFormattedData($field);
     }
@@ -142,9 +137,10 @@ class Formatter
     /**
      * Parse the data array, converting dots and asterisks.
      *
-     * @return array
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
      */
-    public function parseData(array $data)
+    public function parseData(array $data): array
     {
         $newData = [];
 
@@ -156,7 +152,7 @@ class Formatter
             $key = str_replace(
                 ['.', '*'],
                 [$this->dotPlaceholder, '__asterisk__'],
-                $key
+                (string) $key
             );
 
             $newData[$key] = $value;
@@ -166,9 +162,9 @@ class Formatter
     }
 
     /**
-     * process the formatter rules.
+     * Process the formatter rules.
      */
-    public function format()
+    public function format(): self
     {
         // We'll spin through each rule, formatting the attributes attached to that
         // rule. Any error messages will be added to the containers with each of
@@ -198,17 +194,13 @@ class Formatter
         return $this;
     }
 
-    /**
-     * @param  string  $attribute
-     * @param  string  $rule
-     */
-    protected function formatAttribute($attribute, $rule)
+    protected function formatAttribute(string $attribute, string $rule): void
     {
         $this->currentRule = $rule;
 
         [$rule, $parameters] = FormatterRuleParser::parse($rule);
 
-        if ($rule == '') {
+        if ($rule === '') {
             return;
         }
 
@@ -218,7 +210,7 @@ class Formatter
         $formattable = $this->isFormattable($rule, $attribute);
         $value = $this->getValue($attribute);
 
-        $method = "format{$rule}";
+        $method = 'format' . $rule;
 
         if ($formattable && method_exists($this, $method)) {
             $value = $this->$method($attribute, $value, $parameters, $this);
@@ -228,15 +220,11 @@ class Formatter
     }
 
     /**
-     * Determine if the attribute is formattable
-     *
-     * @param  object|string  $rule
-     * @param  string  $attribute
-     * @return bool
+     * Determine if the attribute is formattable.
      */
-    protected function isFormattable($rule, $attribute)
+    protected function isFormattable(string $rule, string $attribute): bool
     {
-        if (in_array($rule, $this->excludeRules)) {
+        if (in_array($rule, $this->excludeRules, true)) {
             return true;
         }
 
@@ -245,34 +233,24 @@ class Formatter
 
     /**
      * Determine if a given rule implies the attribute is required.
-     *
-     * @param  object|string  $rule
-     * @return bool
      */
-    protected function isImplicit($rule)
+    protected function isImplicit(string $rule): bool
     {
-        return in_array($rule, $this->implicitRules);
+        return in_array($rule, $this->implicitRules, true);
     }
 
     /**
      * Determine if the given attribute has a rule in the given set.
-     *
-     * @param  string  $attribute
-     * @param  string|array  $rules
-     * @return bool
      */
-    public function hasRule($attribute, $rules)
+    public function hasRule(string $attribute, string|array $rules): bool
     {
         return ! is_null($this->getRule($attribute, $rules));
     }
 
     /**
      * Get a rule and its parameters for a given attribute.
-     *
-     * @param  string  $attribute
-     * @param  string|array  $rules
      */
-    protected function getRule($attribute, $rules): ?array
+    protected function getRule(string $attribute, string|array $rules): ?array
     {
         if (! array_key_exists($attribute, $this->rules)) {
             return null;
@@ -281,10 +259,9 @@ class Formatter
         $rules = (array) $rules;
 
         foreach ($this->rules[$attribute] as $rule) {
-
             [$rule, $parameters] = FormatterRuleParser::parse($rule);
 
-            if (in_array($rule, $rules)) {
+            if (in_array($rule, $rules, true)) {
                 return [$rule, $parameters];
             }
         }
@@ -294,20 +271,16 @@ class Formatter
 
     /**
      * Get the formatter rules.
-     *
-     * @return array
      */
-    public function getRules()
+    public function getRules(): array
     {
         return $this->rules;
     }
 
     /**
      * Set the formatter rules.
-     *
-     * @return $this
      */
-    public function setRules(array $rules)
+    public function setRules(array $rules): self
     {
         $this->initialRules = $rules;
 
@@ -320,11 +293,8 @@ class Formatter
 
     /**
      * Parse the given rules and merge them into current rules.
-     *
-     * @param  array  $rules
-     * @return void
      */
-    public function addRules($rules)
+    public function addRules(array $rules): void
     {
         // The primary purpose of this parser is to expand any "*" rules to the all
         // of the explicit rules needed for the given data. For example the rule
@@ -344,11 +314,11 @@ class Formatter
     /**
      * Get the attributes and values that were formatted.
      *
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws FormatterException
      */
-    public function formatted()
+    public function formatted(): array
     {
         $results = [];
 
@@ -367,16 +337,13 @@ class Formatter
 
     /**
      * Determine if the attribute should be excluded.
-     *
-     * @param  string  $attribute
-     * @return bool
      */
-    protected function shouldBeExcluded($attribute)
+    protected function shouldBeExcluded(string $attribute): bool
     {
         if (! empty($this->excludeAttributes)) {
             foreach ($this->excludeAttributes as $excludeAttribute) {
                 if ($attribute === $excludeAttribute ||
-                    StringHelper::startsWith($attribute, $excludeAttribute.'.')) {
+                    StringHelper::startsWith($attribute, $excludeAttribute . '.')) {
 
                     return true;
                 }
@@ -388,11 +355,8 @@ class Formatter
 
     /**
      * Remove the given attribute.
-     *
-     * @param  string  $attribute
-     * @return void
      */
-    protected function removeAttribute($attribute)
+    protected function removeAttribute(string $attribute): void
     {
         ArrayHelper::forget($this->data, $attribute);
         ArrayHelper::forget($this->formattedData, $attribute);
@@ -401,30 +365,24 @@ class Formatter
 
     /**
      * Get the data under formatter.
-     *
-     * @return array
      */
-    public function attributes()
+    public function attributes(): array
     {
         return $this->getData();
     }
 
     /**
      * Get the data under formatter.
-     *
-     * @return array
      */
-    public function getData($key = null)
+    public function getData(?string $key = null): mixed
     {
         return $key ? ArrayHelper::get($this->data, $key) : $this->data;
     }
 
     /**
      * Get the data under formatted.
-     *
-     * @return array
      */
-    public function getFormattedData($key = null)
+    public function getFormattedData(?string $key = null): mixed
     {
         return $key ? ArrayHelper::get($this->formattedData, $key) : $this->formattedData;
     }
@@ -432,9 +390,9 @@ class Formatter
     /**
      * Set the data under formatter.
      *
-     * @return $this
+     * @param  array<string, mixed>  $data
      */
-    public function setData(array $data)
+    public function setData(array $data): self
     {
         $this->data = $this->parseData($data);
 
@@ -446,15 +404,15 @@ class Formatter
     /**
      * Replace the placeholders used in data keys.
      *
-     * @param  array  $data
-     * @return array
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
      */
-    protected function replacePlaceholders($data)
+    protected function replacePlaceholders(array $data): array
     {
         $originalData = [];
 
         foreach ($data as $key => $value) {
-            $originalData[$this->replacePlaceholderInString($key)] = is_array($value)
+            $originalData[$this->replacePlaceholderInString((string) $key)] = is_array($value)
                 ? $this->replacePlaceholders($value)
                 : $value;
         }
@@ -464,10 +422,8 @@ class Formatter
 
     /**
      * Replace the placeholders in the given string.
-     *
-     * @return string
      */
-    protected function replacePlaceholderInString(string $value)
+    protected function replacePlaceholderInString(string $value): string
     {
         return str_replace(
             [$this->dotPlaceholder, '__asterisk__'],
@@ -476,18 +432,15 @@ class Formatter
         );
     }
 
-    protected function shouldStopFormatting($attribute)
+    protected function shouldStopFormatting(string $attribute): bool
     {
         return false;
     }
 
     /**
      * Get the value of a given attribute.
-     *
-     * @param  string  $attribute
-     * @return mixed
      */
-    protected function getValue($attribute)
+    protected function getValue(string $attribute): mixed
     {
         if (ArrayHelper::has($this->formattedData, $attribute)) {
             return ArrayHelper::get($this->formattedData, $attribute);
@@ -496,11 +449,7 @@ class Formatter
         return ArrayHelper::get($this->data, $attribute);
     }
 
-    /**
-     * @param  string  $attribute
-     * @param  mixed  $value
-     */
-    protected function saveValue($attribute, $value)
+    protected function saveValue(string $attribute, mixed $value): void
     {
         ArrayHelper::set($this->formattedData, $attribute, $value);
     }

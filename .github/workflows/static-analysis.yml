@@ -1,0 +1,42 @@
+name: static-analysis
+
+on:
+  push:
+    paths:
+      - '**.php'
+      - 'phpstan.neon'
+      - '.github/workflows/static-analysis.yml'
+  pull_request:
+    paths:
+      - '**.php'
+      - 'phpstan.neon'
+      - '.github/workflows/static-analysis.yml'
+
+jobs:
+  phpstan:
+    name: PHPStan Level 8
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl, fileinfo
+          coverage: none
+
+      - name: Composer cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --error-format=github
